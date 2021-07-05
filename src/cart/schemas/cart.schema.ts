@@ -7,6 +7,9 @@ export type CartDocument = Cart & Document
 
 @Schema()
 export class Cart {
+  @Prop()
+  token: string
+
   @Prop([Product])
   items: Product[]
 
@@ -18,6 +21,9 @@ export class Cart {
 
   @Prop(Address)
   shippingAddress: Address
+
+  @Prop()
+  email: string
 }
 
 export const CartSchema = SchemaFactory.createForClass(Cart)

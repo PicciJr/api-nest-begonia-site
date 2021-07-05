@@ -10,6 +10,10 @@ export class CartService {
     @InjectModel(Cart.name) private readonly cartModel: Model<CartDocument>
   ) {}
 
+  get(cartToken) {
+    return this.cartModel.findOne({ token: cartToken })
+  }
+
   async create(createCartDto: CreateCartDto) {
     const createdCart = new this.cartModel(createCartDto)
     await createdCart.save()
