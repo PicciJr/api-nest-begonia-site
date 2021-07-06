@@ -1,26 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
-import { Address } from './address.schema'
-import { Product } from './product.schema'
 
 export type CartDocument = Cart & Document
 
 @Schema()
 export class Cart {
-  @Prop()
+  @Prop({ required: true })
   token: string
 
-  @Prop([Product])
-  items: Product[]
+  @Prop({ type: [Object], required: true })
+  items: object[]
 
-  @Prop()
+  @Prop({ required: true })
   subtotal: number
 
-  @Prop()
+  @Prop({ required: true })
   status: string
 
-  @Prop(Address)
-  shippingAddress: Address
+  @Prop({ type: Object })
+  shippingAddress: object
 
   @Prop()
   email: string

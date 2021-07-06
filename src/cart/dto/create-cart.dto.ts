@@ -1,10 +1,8 @@
-import { CartStatus, IAddress, ICart, IProduct } from 'src/types'
-
-export class CreateCartDto implements ICart {
+export class CreateCartDto {
   token: string
-  items: IProduct[]
+  items: object[]
   subtotal: number
-  status: CartStatus
-  shippingAddress?: IAddress
+  status: string
+  shippingAddress?: object
   email?: string
 }

@@ -18,4 +18,14 @@ export class CartService {
     const createdCart = new this.cartModel(createCartDto)
     await createdCart.save()
   }
+
+  async update(createCartDto: CreateCartDto) {
+    const updatedCart = new this.cartModel(createCartDto)
+    await this.cartModel.findOneAndReplace(
+      {
+        token: createCartDto.token,
+      },
+      updatedCart
+    )
+  }
 }
