@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const config_1 = require("@nestjs/config");
 const cart_module_1 = require("./cart/cart.module");
+const product_module_1 = require("./product/product.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -21,6 +22,7 @@ AppModule = __decorate([
             }),
             mongoose_1.MongooseModule.forRoot(`mongodb+srv://dbAdmin:${process.env.MONGODB_PASS}@${process.env.MONGO_CLUSTER_URL}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority&ssl=true`),
             cart_module_1.CartModule,
+            product_module_1.ProductModule,
         ],
     })
 ], AppModule);
