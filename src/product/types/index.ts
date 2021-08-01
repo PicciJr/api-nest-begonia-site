@@ -7,5 +7,6 @@ export interface IProduct {
   sizes?: string[]
   images: string[]
   hasVariants?: boolean
+  amount?: number
   similarProducts?: IProduct[]
 }

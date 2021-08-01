@@ -6,12 +6,12 @@ import { IProduct } from './types'
 export class ProductService {
   constructor(private httpservice: HttpService) {}
 
-  async get(productId: number): Promise<IProduct> {
+  async get(productId: string): Promise<IProduct> {
     const response = await this.httpservice
       .get(`${process.env.STRAPI_BACK_BASE_URL}/productos`)
       .toPromise()
     const product = response.data.find(
-      (product) => product.id.toString() === productId
+      (product) => product.id === productId
     )
     return {
       id: product.id,
