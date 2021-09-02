@@ -8,19 +8,21 @@ export class ProductService {
 
   async get(productId: string): Promise<IProduct> {
     const response = await this.httpservice
-      .get(`${process.env.STRAPI_BACK_BASE_URL}/productos`)
+      .get(`${process.env.STRAPI_BACK_BASE_URL}/productos/${productId}`)
       .toPromise()
-    const product = response.data.find(
-      (product) => product.id === productId
-    )
-    return {
-      id: product.id,
-      images: product.imagenes,
-      longDescription: product.descripcion,
-      price: product.precio,
-      title: product.titulo,
-      type: null,
-      hasVariants: product.es_configurable,
+    if (response?.data && response?.status === 200) {
+      const { id, imagenes, descripcion, precio, titulo, variantes } =
+        response.data
+      return {
+        id,
+        images: imagenes,
+        longDescription: descripcion,
+        price: precio,
+        title: titulo,
+        type: null,
+        hasVariants: variantes?.length > 0 || false,
+      }
     }
+    // TODO: si no se encuentra el producto, devolver un error
   }
 }
