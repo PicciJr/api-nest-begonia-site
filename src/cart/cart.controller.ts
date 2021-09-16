@@ -12,6 +12,7 @@ import {
 import { CartService } from './cart.service'
 import { CreateCartDto } from './dto/create-cart.dto'
 import { generateRandomToken } from '../utils/tokenGenerator'
+import { IAddress } from './types'
 
 @Controller('cart')
 export class CartController {
@@ -49,6 +50,11 @@ export class CartController {
   @Post(':token/:productId')
   async addItem(@Param('token') token: string, @Param('productId') productId) {
     await this.cartService.addItem(token, productId)
+  }
+
+  @Put(':token/address')
+  async updateShippingAddress(@Param('token') token: string, @Body('address') address: IAddress) {
+    await this.cartService.updateShippingAddress(token, address)
   }
 
   @Put('/:token/:productId')

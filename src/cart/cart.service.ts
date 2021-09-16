@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { CalculatorService } from 'src/calculator/calculator.service'
-import { ShippingTariff } from 'src/cart/types'
+import { IAddress, ShippingTariff } from 'src/cart/types'
 import { Model } from 'mongoose'
 import { ProductService } from 'src/product/product.service'
 import { CreateCartDto } from './dto/create-cart.dto'
@@ -62,6 +62,15 @@ export class CartService {
     cart.subtotal = subtotal
     cart.total = total
     return cart
+  }
+
+  async updateShippingAddress(cartToken: string, address: IAddress) {
+    const cart = await this.get(cartToken)
+    cart.shippingAddress = address
+    const cartUpdated = await this.cartModel.findByIdAndUpdate(cart._id, cart, {
+      new: true,
+    })
+    return cartUpdated
   }
 
   async completeOrder(cartToken: string) {
