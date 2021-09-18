@@ -22,7 +22,11 @@ export class CartService {
   async create(cartToken: string, productId: string, quantity: number) {
     const product = await this.productService.get(productId)
     product.amount = quantity
-    const { subtotal, shippingCosts, total } = this.calculator.createCalculator(product, quantity, ShippingTariff.NORMAL)
+    const { subtotal, shippingCosts, total } = this.calculator.createCalculator(
+      product,
+      quantity,
+      ShippingTariff.NORMAL
+    )
     const newCart: CreateCartDto = {
       token: cartToken,
       items: [product],
@@ -39,7 +43,8 @@ export class CartService {
     const cart = await this.get(cartToken)
     const productInCart = cart.items.find((product) => product.id === productId)
     productInCart.amount = quantity
-    const { subtotal, shippingCosts, total } = this.calculator.recalculateTotals(cart)
+    const { subtotal, shippingCosts, total } =
+      this.calculator.recalculateTotals(cart)
     cart.subtotal = subtotal
     cart.total = total
     cart.shippingCosts = shippingCosts
@@ -49,15 +54,27 @@ export class CartService {
     return cartUpdated
   }
 
-  async addItem(cartToken: string, productId: string) {
-    // TODO: get carrito de BBDD
-    // actualizar objeto totals y devolver la info de carrito
+  async addItem(cartToken: string, productId: string, quantity: number) {
+    const cart = await this.get(cartToken)
+    const product = await this.productService.get(productId)
+    product.amount = quantity
+    cart.items = [...cart.items, product]
+    const { subtotal, shippingCosts, total } =
+      this.calculator.recalculateTotals(cart)
+    cart.subtotal = subtotal
+    cart.total = total
+    cart.shippingCosts = shippingCosts
+    const cartUpdated = await this.cartModel.findByIdAndUpdate(cart._id, cart, {
+      new: true,
+    })
+    return cartUpdated
   }
 
   async removeItem(cartToken: string, productId: number) {
     const cart = await this.get(cartToken)
     cart.items = cart.items.filter((product) => product.id === productId)
-    const { subtotal, shippingCosts, total } = this.calculator.recalculateTotals(cart)
+    const { subtotal, shippingCosts, total } =
+      this.calculator.recalculateTotals(cart)
     cart.shippingCosts = shippingCosts
     cart.subtotal = subtotal
     cart.total = total

@@ -48,12 +48,21 @@ export class CartController {
   }
 
   @Post(':token/:productId')
-  async addItem(@Param('token') token: string, @Param('productId') productId) {
-    await this.cartService.addItem(token, productId)
+  async addItem(
+    @Param('token') token: string,
+    @Param('productId') productId: string,
+    @Body('quantity') quantity: number,
+    @Res() res
+  ) {
+    const updatedCart = await this.cartService.addItem(token, productId, quantity)
+    return res.send(updatedCart)
   }
 
   @Put(':token/address')
-  async updateShippingAddress(@Param('token') token: string, @Body('address') address: IAddress) {
+  async updateShippingAddress(
+    @Param('token') token: string,
+    @Body('address') address: IAddress
+  ) {
     await this.cartService.updateShippingAddress(token, address)
   }
 
@@ -77,10 +86,7 @@ export class CartController {
   }
 
   @Put('/checkout/complete/:token')
-  async completeOrder(
-    @Param('token') token: string,
-    @Res() res
-  ) {
+  async completeOrder(@Param('token') token: string, @Res() res) {
     try {
       const updatedCart = await this.cartService.completeOrder(token)
       return res.send(updatedCart)
