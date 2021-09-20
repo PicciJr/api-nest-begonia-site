@@ -19,7 +19,7 @@ export class CartService {
     return this.cartModel.findOne({ token: cartToken })
   }
 
-  async create(cartToken: string, productId: string, quantity: number) {
+  async create(cartToken: string, productId: number, quantity: number) {
     const product = await this.productService.get(productId)
     product.amount = quantity
     const { subtotal, shippingCosts, total } = this.calculator.createCalculator(
@@ -54,7 +54,7 @@ export class CartService {
     return cartUpdated
   }
 
-  async addItem(cartToken: string, productId: string, quantity: number) {
+  async addItem(cartToken: string, productId: number, quantity: number) {
     const cart = await this.get(cartToken)
     const product = await this.productService.get(productId)
     product.amount = quantity
@@ -72,13 +72,16 @@ export class CartService {
 
   async removeItem(cartToken: string, productId: number) {
     const cart = await this.get(cartToken)
-    cart.items = cart.items.filter((product) => product.id === productId)
+    cart.items = cart.items.filter((product) => product.id !== productId)
     const { subtotal, shippingCosts, total } =
       this.calculator.recalculateTotals(cart)
     cart.shippingCosts = shippingCosts
     cart.subtotal = subtotal
     cart.total = total
-    return cart
+    const cartUpdated = await this.cartModel.findByIdAndUpdate(cart._id, cart, {
+      new: true,
+    })
+    return cartUpdated
   }
 
   async updateShippingAddress(cartToken: string, address: IAddress) {

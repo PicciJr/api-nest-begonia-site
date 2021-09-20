@@ -30,7 +30,7 @@ export class CartController {
 
   @Post()
   async create(
-    @Body('productId') productId: string,
+    @Body('productId') productId: number,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -50,7 +50,7 @@ export class CartController {
   @Post(':token/:productId')
   async addItem(
     @Param('token') token: string,
-    @Param('productId') productId: string,
+    @Param('productId') productId: number,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -69,14 +69,14 @@ export class CartController {
   @Put('/:token/:productId')
   async updateItem(
     @Param('token') token: string,
-    @Param('productId') productId,
+    @Param('productId') productId: number,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
     try {
       const updatedCart = await this.cartService.updateItem(
         token,
-        Number(productId),
+        productId,
         quantity
       )
       return res.send(updatedCart)
@@ -98,7 +98,7 @@ export class CartController {
   @Delete(':token/:productId')
   async removeItem(
     @Param('token') token: string,
-    @Param('productId') productId,
+    @Param('productId') productId: number,
     @Res() res
   ) {
     try {
