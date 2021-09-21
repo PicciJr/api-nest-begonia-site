@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Req,
@@ -30,7 +31,7 @@ export class CartController {
 
   @Post()
   async create(
-    @Body('productId') productId: number,
+    @Body('productId', ParseIntPipe) productId: number,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -50,7 +51,7 @@ export class CartController {
   @Post(':token/:productId')
   async addItem(
     @Param('token') token: string,
-    @Param('productId') productId: number,
+    @Param('productId', ParseIntPipe) productId: number,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -61,15 +62,17 @@ export class CartController {
   @Put(':token/address')
   async updateShippingAddress(
     @Param('token') token: string,
-    @Body('address') address: IAddress
+    @Body('address') address: IAddress,
+    @Res() res
   ) {
-    await this.cartService.updateShippingAddress(token, address)
+    const updatedCart = await this.cartService.updateShippingAddress(token, address)
+    return res.send(updatedCart)
   }
 
   @Put('/:token/:productId')
   async updateItem(
     @Param('token') token: string,
-    @Param('productId') productId: number,
+    @Param('productId', ParseIntPipe) productId: number,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -98,7 +101,7 @@ export class CartController {
   @Delete(':token/:productId')
   async removeItem(
     @Param('token') token: string,
-    @Param('productId') productId: number,
+    @Param('productId', ParseIntPipe) productId: number,
     @Res() res
   ) {
     try {

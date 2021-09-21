@@ -87,6 +87,7 @@ export class CartService {
   async updateShippingAddress(cartToken: string, address: IAddress) {
     const cart = await this.get(cartToken)
     cart.shippingAddress = address
+    cart.status = 'Addressed'
     const cartUpdated = await this.cartModel.findByIdAndUpdate(cart._id, cart, {
       new: true,
     })
