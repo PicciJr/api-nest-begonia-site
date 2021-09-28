@@ -8,5 +8,6 @@ export interface IProduct {
   images: string[]
   hasVariants?: boolean
   amount?: number
+  slug: string
   similarProducts?: IProduct[]
 }

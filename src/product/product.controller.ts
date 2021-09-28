@@ -22,5 +22,25 @@ import { ProductService } from './product.service'
         throw err
       }
     }
+
+    @Get('/slug/:productSlug')
+    async getProductBySlug(@Param('productSlug') productSlug: string, @Res() res) {
+      try {
+        const product = await this.productService.getProductBySlug(productSlug)
+        return res.send(product)
+      } catch (err) {
+        throw err
+      }
+    }
+
+    @Get('/tienda/all')
+    async getAllProducts(@Res() res) {
+      try {
+        const products = await this.productService.getAllProducts()
+        return res.send(products)
+      } catch (err) {
+        throw err
+      }
+    }
   }
   
