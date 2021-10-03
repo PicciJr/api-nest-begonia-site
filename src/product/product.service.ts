@@ -6,13 +6,26 @@ import { IProduct } from './types'
 export class ProductService {
   constructor(private httpservice: HttpService) {}
 
-  async get(productId: number): Promise<IProduct> {
+  async get(productId: number, variantId: number = null): Promise<IProduct> {
     const response = await this.httpservice
       .get(`${process.env.STRAPI_BACK_BASE_URL}/productos/${productId}`)
       .toPromise()
     if (response?.data && response?.status === 200) {
-      const { id, imagenes, descripcion, precio, titulo, variantes, slug } =
+      let { id, imagenes, descripcion, precio, titulo, variantes, slug } =
         response.data
+      let variantSelected = null
+      if (variantId !== null) {
+        variantSelected = variantes
+          .map(({ id, precio, variante }) => {
+            return {
+              id,
+              price: precio,
+              variant: variante,
+            }
+          })
+          .find(({ id }) => variantId === id)
+        precio = variantSelected.price
+      }
       return {
         id,
         images: imagenes,
@@ -22,6 +35,14 @@ export class ProductService {
         type: null,
         slug,
         hasVariants: variantes?.length > 0 || false,
+        variantSelected,
+        variants: variantes.map(({ id, precio, variante }) => {
+          return {
+            id,
+            price: precio,
+            variant: variante,
+          }
+        }),
       }
     }
     // TODO: si no se encuentra el producto, devolver un error
@@ -44,6 +65,13 @@ export class ProductService {
               type: null,
               slug,
               hasVariants: variantes?.length > 0 || false,
+              variants: variantes.map(({ id, precio, variante }) => {
+                return {
+                  id,
+                  price: precio,
+                  variant: variante,
+                }
+              }),
             }
           }
         )
@@ -66,6 +94,13 @@ export class ProductService {
           type: null,
           slug,
           hasVariants: variantes?.length > 0 || false,
+          variants: variantes.map(({ id, precio, variante }) => {
+            return {
+              id,
+              price: precio,
+              variant: variante,
+            }
+          }),
         }
       }
     )

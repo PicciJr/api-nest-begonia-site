@@ -19,8 +19,8 @@ export class CartService {
     return this.cartModel.findOne({ token: cartToken })
   }
 
-  async create(cartToken: string, productId: number, quantity: number) {
-    const product = await this.productService.get(productId)
+  async create(cartToken: string, productId: number, variantId: number = null, quantity: number) {
+    const product = await this.productService.get(productId, variantId)
     product.amount = quantity
     const { subtotal, shippingCosts, total } = this.calculator.createCalculator(
       product,
@@ -39,9 +39,12 @@ export class CartService {
     return createdCart.save()
   }
 
-  async updateItem(cartToken: string, productId: number, quantity: number) {
+  async updateItem(cartToken: string, productId: number, variantId: number = null, quantity: number) {
     const cart = await this.get(cartToken)
-    const productInCart = cart.items.find((product) => product.id === productId)
+    const productInCart = cart.items.find((product) => {
+      if (!variantId) return product.id === productId
+      else return product?.variantSelected?.id === variantId ?? null
+    })
     productInCart.amount = quantity
     const { subtotal, shippingCosts, total } =
       this.calculator.recalculateTotals(cart)
@@ -54,9 +57,9 @@ export class CartService {
     return cartUpdated
   }
 
-  async addItem(cartToken: string, productId: number, quantity: number) {
+  async addItem(cartToken: string, productId: number, variantId: number = null, quantity: number) {
     const cart = await this.get(cartToken)
-    const product = await this.productService.get(productId)
+    const product = await this.productService.get(productId, variantId)
     product.amount = quantity
     cart.items = [...cart.items, product]
     const { subtotal, shippingCosts, total } =
@@ -70,9 +73,12 @@ export class CartService {
     return cartUpdated
   }
 
-  async removeItem(cartToken: string, productId: number) {
+  async removeItem(cartToken: string, productId: number, variantId: number = null) {
     const cart = await this.get(cartToken)
-    cart.items = cart.items.filter((product) => product.id !== productId)
+    cart.items = cart.items.filter((product) => {
+      if (!variantId) return product.id !== productId
+      else return product?.variantSelected?.id !== variantId ?? null
+    })
     const { subtotal, shippingCosts, total } =
       this.calculator.recalculateTotals(cart)
     cart.shippingCosts = shippingCosts

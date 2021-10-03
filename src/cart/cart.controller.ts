@@ -32,6 +32,7 @@ export class CartController {
   @Post()
   async create(
     @Body('productId', ParseIntPipe) productId: number,
+    @Body('variantId') variantId: number = null,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -40,6 +41,7 @@ export class CartController {
       const createdCart = await this.cartService.create(
         newCartToken,
         productId,
+        variantId,
         quantity
       )
       return res.send(createdCart)
@@ -52,10 +54,16 @@ export class CartController {
   async addItem(
     @Param('token') token: string,
     @Param('productId', ParseIntPipe) productId: number,
+    @Body('variantId') variantId: number = null,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
-    const updatedCart = await this.cartService.addItem(token, productId, quantity)
+    const updatedCart = await this.cartService.addItem(
+      token,
+      productId,
+      variantId,
+      quantity
+    )
     return res.send(updatedCart)
   }
 
@@ -65,7 +73,10 @@ export class CartController {
     @Body('address') address: IAddress,
     @Res() res
   ) {
-    const updatedCart = await this.cartService.updateShippingAddress(token, address)
+    const updatedCart = await this.cartService.updateShippingAddress(
+      token,
+      address
+    )
     return res.send(updatedCart)
   }
 
@@ -73,6 +84,7 @@ export class CartController {
   async updateItem(
     @Param('token') token: string,
     @Param('productId', ParseIntPipe) productId: number,
+    @Body('variantId') variantId: number,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -80,18 +92,9 @@ export class CartController {
       const updatedCart = await this.cartService.updateItem(
         token,
         productId,
+        variantId,
         quantity
       )
-      return res.send(updatedCart)
-    } catch (err) {
-      throw err
-    }
-  }
-
-  @Put('/checkout/complete/:token')
-  async completeOrder(@Param('token') token: string, @Res() res) {
-    try {
-      const updatedCart = await this.cartService.completeOrder(token)
       return res.send(updatedCart)
     } catch (err) {
       throw err
@@ -102,10 +105,21 @@ export class CartController {
   async removeItem(
     @Param('token') token: string,
     @Param('productId', ParseIntPipe) productId: number,
+    @Body('variantId') variantId: number,
     @Res() res
   ) {
     try {
-      const updatedCart = await this.cartService.removeItem(token, productId)
+      const updatedCart = await this.cartService.removeItem(token, productId, variantId)
+      return res.send(updatedCart)
+    } catch (err) {
+      throw err
+    }
+  }
+
+  @Put('/checkout/complete/:token')
+  async completeOrder(@Param('token') token: string, @Res() res) {
+    try {
+      const updatedCart = await this.cartService.completeOrder(token)
       return res.send(updatedCart)
     } catch (err) {
       throw err
