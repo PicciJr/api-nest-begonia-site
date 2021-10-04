@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   Req,
@@ -31,8 +30,8 @@ export class CartController {
 
   @Post()
   async create(
-    @Body('productId', ParseIntPipe) productId: number,
-    @Body('variantId') variantId: number = null,
+    @Body('productId') productId: number | string,
+    @Body('variantId') variantId: number | string = null,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -53,8 +52,8 @@ export class CartController {
   @Post(':token/:productId')
   async addItem(
     @Param('token') token: string,
-    @Param('productId', ParseIntPipe) productId: number,
-    @Body('variantId') variantId: number = null,
+    @Param('productId') productId: number | string,
+    @Body('variantId') variantId: number | string = null,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -83,8 +82,8 @@ export class CartController {
   @Put('/:token/:productId')
   async updateItem(
     @Param('token') token: string,
-    @Param('productId', ParseIntPipe) productId: number,
-    @Body('variantId') variantId: number,
+    @Param('productId') productId: number | string,
+    @Body('variantId') variantId: number | string,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -104,8 +103,8 @@ export class CartController {
   @Delete(':token/:productId')
   async removeItem(
     @Param('token') token: string,
-    @Param('productId', ParseIntPipe) productId: number,
-    @Body('variantId') variantId: number,
+    @Param('productId') productId: number | string,
+    @Body('variantId') variantId: number | string,
     @Res() res
   ) {
     try {

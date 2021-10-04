@@ -19,7 +19,7 @@ export class CartService {
     return this.cartModel.findOne({ token: cartToken })
   }
 
-  async create(cartToken: string, productId: number, variantId: number = null, quantity: number) {
+  async create(cartToken: string, productId: number | string, variantId: number | string = null, quantity: number) {
     const product = await this.productService.get(productId, variantId)
     product.amount = quantity
     const { subtotal, shippingCosts, total } = this.calculator.createCalculator(
@@ -39,7 +39,7 @@ export class CartService {
     return createdCart.save()
   }
 
-  async updateItem(cartToken: string, productId: number, variantId: number = null, quantity: number) {
+  async updateItem(cartToken: string, productId: number | string, variantId: number | string = null, quantity: number) {
     const cart = await this.get(cartToken)
     const productInCart = cart.items.find((product) => {
       if (!variantId) return product.id === productId
@@ -57,7 +57,7 @@ export class CartService {
     return cartUpdated
   }
 
-  async addItem(cartToken: string, productId: number, variantId: number = null, quantity: number) {
+  async addItem(cartToken: string, productId: number | string, variantId: number | string = null, quantity: number) {
     const cart = await this.get(cartToken)
     const product = await this.productService.get(productId, variantId)
     product.amount = quantity
@@ -73,7 +73,7 @@ export class CartService {
     return cartUpdated
   }
 
-  async removeItem(cartToken: string, productId: number, variantId: number = null) {
+  async removeItem(cartToken: string, productId: number | string, variantId: number | string = null) {
     const cart = await this.get(cartToken)
     cart.items = cart.items.filter((product) => {
       if (!variantId) return product.id !== productId
