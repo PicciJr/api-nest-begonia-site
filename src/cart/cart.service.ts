@@ -6,13 +6,15 @@ import { Model } from 'mongoose'
 import { ProductService } from 'src/product/product.service'
 import { CreateCartDto } from './dto/create-cart.dto'
 import { Cart, CartDocument } from './schemas/cart.schema'
+import { MailService } from 'src/mail/mail.service'
 
 @Injectable()
 export class CartService {
   constructor(
     @InjectModel(Cart.name) private readonly cartModel: Model<CartDocument>,
     private productService: ProductService,
-    private calculator: CalculatorService
+    private calculator: CalculatorService,
+    private mailService: MailService
   ) {}
 
   get(cartToken: string) {
@@ -106,6 +108,7 @@ export class CartService {
     const cartUpdated = await this.cartModel.findByIdAndUpdate(cart._id, cart, {
       new: true,
     })
+    await this.mailService.sendOrderCompletedEmailToAdmin(cart)
     return cartUpdated
   }
 }

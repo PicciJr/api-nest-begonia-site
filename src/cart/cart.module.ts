@@ -6,6 +6,7 @@ import { CartService } from './cart.service'
 import { Cart, CartSchema } from './schemas/cart.schema'
 import { ProductService } from 'src/product/product.service'
 import { CalculatorService } from 'src/calculator/calculator.service'
+import { MailService } from 'src/mail/mail.service'
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { CalculatorService } from 'src/calculator/calculator.service'
     }),
   ],
   controllers: [CartController],
-  providers: [CartService, ProductService, CalculatorService],
+  providers: [CartService, ProductService, CalculatorService, MailService],
 })
 export class CartModule {}
