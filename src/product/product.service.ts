@@ -11,7 +11,7 @@ export class ProductService {
       .get(`${process.env.STRAPI_BACK_BASE_URL}/productos/${productId}`)
       .toPromise()
     if (response?.data && response?.status === 200) {
-      let { id, imagenes, descripcion, precio, titulo, variantes, slug } =
+      let { id, imagenes, descripcion, precio, titulo, variantes, slug, tipo_producto } =
         response.data
       let variantSelected = null
       if (variantId !== null) {
@@ -32,7 +32,7 @@ export class ProductService {
         longDescription: descripcion,
         price: precio,
         title: titulo,
-        type: null,
+        type: tipo_producto,
         slug,
         hasVariants: variantes?.length > 0 || false,
         variantSelected,
@@ -55,14 +55,14 @@ export class ProductService {
     if (response?.data && response?.status === 200) {
       return response.data
         .map(
-          ({ id, imagenes, descripcion, precio, titulo, variantes, slug }) => {
+          ({ id, imagenes, descripcion, precio, titulo, variantes, slug, tipo_producto }) => {
             return {
               id,
               images: imagenes,
               longDescription: descripcion,
               price: precio,
               title: titulo,
-              type: null,
+              type: tipo_producto,
               slug,
               hasVariants: variantes?.length > 0 || false,
               variants: variantes.map(({ id, precio, variante }) => {
@@ -84,14 +84,14 @@ export class ProductService {
       .get(`${process.env.STRAPI_BACK_BASE_URL}/productos`)
       .toPromise()
     return response.data.map(
-      ({ id, imagenes, descripcion, precio, titulo, variantes, slug }) => {
+      ({ id, imagenes, descripcion, precio, titulo, variantes, slug, tipo_producto }) => {
         return {
           id,
           images: imagenes,
           longDescription: descripcion,
           price: precio,
           title: titulo,
-          type: null,
+          type: tipo_producto,
           slug,
           hasVariants: variantes?.length > 0 || false,
           variants: variantes.map(({ id, precio, variante }) => {

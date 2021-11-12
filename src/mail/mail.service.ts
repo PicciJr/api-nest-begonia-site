@@ -4,8 +4,7 @@ const sgMail = require('@sendgrid/mail')
 
 @Injectable()
 export class MailService {
-
-  sendOrderCompletedEmailToAdmin(cart: CartDocument) {
+  async sendOrderCompletedEmailToAdmin(cart: CartDocument) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY)
     const msg = {
       to: process.env.SENDGRID_ADMIN_TO,
@@ -16,16 +15,34 @@ export class MailService {
         id: cart.token,
         items: cart.items,
         shippingAddress: cart.shippingAddress,
-        total: cart.total
-      }
+        total: cart.total,
+      },
     }
-    sgMail
-      .send(msg)
-      .then(() => {
-        console.log('Email sent')
-      })
-      .catch((error) => {
-        console.error('error al enviar email', error)
-      })
+    try {
+      const response = await sgMail.send(msg)
+      return response
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
+  async sendEncargoPersonalizadoEmail({ email, name, longDescription }) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+    const msg = {
+      to: process.env.SENDGRID_ADMIN_TO,
+      from: process.env.SENDGRID_ADMIN_FROM,
+      templateId: 'd-f12f87332972491e9d73bd5dcc681597',
+      dynamicTemplateData: {
+        name,
+        email,
+        longDescription,
+      },
+    }
+    try {
+      const response = await sgMail.send(msg)
+      return response
+    } catch (err) {
+      throw new Error(err)
+    }
   }
 }
