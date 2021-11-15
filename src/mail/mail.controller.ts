@@ -33,4 +33,23 @@ export class MailController {
       throw err
     }
   }
+
+  @Post('/contacto')
+  async contactFormSubmitted(
+    @Body('email') email: string,
+    @Body('name') name: string,
+    @Body('longDescription') longDescription: string,
+    @Res() res
+  ) {
+    try {
+      const response = await this.mailService.sendContactFormEmail({
+        email,
+        name,
+        longDescription,
+      })
+      return res.send(response)
+    } catch (err) {
+      throw err
+    }
+  }
 }

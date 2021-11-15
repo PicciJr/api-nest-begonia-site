@@ -45,4 +45,23 @@ export class MailService {
       throw new Error(err)
     }
   }
+  async sendContactFormEmail({ email, name, longDescription }) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+    const msg = {
+      to: process.env.SENDGRID_ADMIN_TO,
+      from: process.env.SENDGRID_ADMIN_FROM,
+      templateId: 'd-2fce0b2377694f44810e57e1a6a6a13d',
+      dynamicTemplateData: {
+        name,
+        email,
+        longDescription,
+      },
+    }
+    try {
+      const response = await sgMail.send(msg)
+      return response
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
 }
