@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -22,9 +24,16 @@ export class CartController {
   async get(@Param('token') token: string, @Res() res) {
     try {
       const cart = await this.cartService.get(token)
+      if (!cart) {
+        throw new HttpException({
+          status: HttpStatus.NOT_FOUND,
+          error: 'Cart not found',
+        }, HttpStatus.NOT_FOUND);
+      }
       return res.send(cart)
     } catch (err) {
-      throw err
+      res.send(err)
+      // TODO: add bugsnag as extra layer
     }
   }
 
