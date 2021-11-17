@@ -6,13 +6,24 @@ import { IProduct } from './types'
 export class ProductService {
   constructor(private httpservice: HttpService) {}
 
-  async get(productId: number | string, variantId: number | string = null): Promise<IProduct> {
+  async get(
+    productId: number | string,
+    variantId: number | string = null
+  ): Promise<IProduct> {
     const response = await this.httpservice
       .get(`${process.env.STRAPI_BACK_BASE_URL}/productos/${productId}`)
       .toPromise()
     if (response?.data && response?.status === 200) {
-      let { id, imagenes, descripcion, precio, titulo, variantes, slug, tipo_producto } =
-        response.data
+      let {
+        id,
+        imagenes,
+        descripcion,
+        precio,
+        titulo,
+        variantes,
+        slug,
+        tipo_producto,
+      } = response.data
       let variantSelected = null
       if (variantId !== null) {
         variantSelected = variantes
@@ -55,7 +66,17 @@ export class ProductService {
     if (response?.data && response?.status === 200) {
       return response.data
         .map(
-          ({ id, imagenes, descripcion, precio, titulo, variantes, slug, tipo_producto }) => {
+          ({
+            id,
+            imagenes,
+            descripcion,
+            precio,
+            titulo,
+            variantes,
+            slug,
+            tipo_producto,
+            Relacionados,
+          }) => {
             return {
               id,
               images: imagenes,
@@ -72,6 +93,8 @@ export class ProductService {
                   variant: variante,
                 }
               }),
+              relatedProducts:
+                Relacionados.map(({ productos }) => productos) || [],
             }
           }
         )
@@ -84,7 +107,16 @@ export class ProductService {
       .get(`${process.env.STRAPI_BACK_BASE_URL}/productos`)
       .toPromise()
     return response.data.map(
-      ({ id, imagenes, descripcion, precio, titulo, variantes, slug, tipo_producto }) => {
+      ({
+        id,
+        imagenes,
+        descripcion,
+        precio,
+        titulo,
+        variantes,
+        slug,
+        tipo_producto,
+      }) => {
         return {
           id,
           images: imagenes,

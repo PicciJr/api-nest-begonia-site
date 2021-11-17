@@ -14,7 +14,7 @@ import { ProductService } from './product.service'
     constructor(private readonly productService: ProductService) {}
   
     @Get(':productId')
-    async get(@Param('productId') productId: number, @Res() res) {
+    async get(@Param('productId') productId: number | string, @Res() res) {
       try {
         const product = await this.productService.get(productId)
         return res.send(product)
