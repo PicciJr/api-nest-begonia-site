@@ -102,9 +102,9 @@ export class ProductService {
     }
   }
 
-  async getAllProducts() {
+  async getAllProducts(sortCriteria: String = 'orden_aparicion', sort: String = 'ASC') {
     const response = await this.httpservice
-      .get(`${process.env.STRAPI_BACK_BASE_URL}/productos`)
+      .get(`${process.env.STRAPI_BACK_BASE_URL}/productos?_sort=${sortCriteria}:${sort}`)
       .toPromise()
     return response.data.map(
       ({

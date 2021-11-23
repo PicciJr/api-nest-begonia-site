@@ -34,9 +34,9 @@ import { ProductService } from './product.service'
     }
 
     @Get('/tienda/all')
-    async getAllProducts(@Res() res) {
+    async getAllProducts(@Res() res, sortCriteria: String = 'orden_aparicion', sort: String = 'ASC') {
       try {
-        const products = await this.productService.getAllProducts()
+        const products = await this.productService.getAllProducts(sortCriteria, sort)
         return res.send(products)
       } catch (err) {
         throw err
