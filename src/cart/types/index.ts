@@ -1,6 +1,6 @@
 export enum ShippingTariff {
   FREE = 0.0,
-  NORMAL = 4.95,
+  NORMAL = 5.95,
 }
 
 export interface IAddress {
