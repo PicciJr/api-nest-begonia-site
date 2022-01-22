@@ -9,6 +9,8 @@ export interface IProduct {
   title: string
   longDescription: string
   price: number
+  minPrice?: number
+  maxPrice?: number
   type: string
   sizes?: string[]
   images: string[]
