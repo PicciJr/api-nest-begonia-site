@@ -4,6 +4,11 @@ export interface IProductVariant {
   title: string
 }
 
+export interface IHoroscope {
+  firstHand: string
+  secondHand: string
+}
+
 export interface IProduct {
   id: number
   title: string
@@ -17,6 +22,8 @@ export interface IProduct {
   hasVariants?: boolean
   variants: IProduct[]
   variantSelected: IProductVariant
+  customHoroscopes: Array<any>
+  customOptionSelected?: IHoroscope
   amount?: number
   slug: string
   similarProducts?: IProduct[]

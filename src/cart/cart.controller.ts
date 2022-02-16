@@ -15,6 +15,7 @@ import { CartService } from './cart.service'
 import { CreateCartDto } from './dto/create-cart.dto'
 import { generateRandomToken } from '../utils/tokenGenerator'
 import { IAddress } from './types'
+import { IHoroscope } from 'src/product/types'
 
 @Controller('cart')
 export class CartController {
@@ -41,6 +42,7 @@ export class CartController {
   async create(
     @Body('productId') productId: number | string,
     @Body('variantId') variantId: number | string = null,
+    @Body('options') options: IHoroscope = null,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -50,6 +52,7 @@ export class CartController {
         newCartToken,
         productId,
         variantId,
+        options,
         quantity
       )
       return res.send(createdCart)
@@ -63,6 +66,7 @@ export class CartController {
     @Param('token') token: string,
     @Param('productId') productId: number | string,
     @Body('variantId') variantId: number | string = null,
+    @Body('options') options: IHoroscope = null,
     @Body('quantity') quantity: number,
     @Res() res
   ) {
@@ -70,6 +74,7 @@ export class CartController {
       token,
       productId,
       variantId,
+      options,
       quantity
     )
     return res.send(updatedCart)

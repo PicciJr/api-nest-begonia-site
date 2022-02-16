@@ -7,6 +7,7 @@ import { ProductService } from 'src/product/product.service'
 import { CreateCartDto } from './dto/create-cart.dto'
 import { Cart, CartDocument } from './schemas/cart.schema'
 import { MailService } from 'src/mail/mail.service'
+import { IHoroscope } from 'src/product/types'
 
 @Injectable()
 export class CartService {
@@ -25,10 +26,12 @@ export class CartService {
     cartToken: string,
     productId: number | string,
     variantId: number | string = null,
+    optionSeleted: IHoroscope = null,
     quantity: number
   ) {
     const product = await this.productService.get(productId, variantId)
     product.amount = quantity
+    product.customOptionSelected = optionSeleted
     const { subtotal, shippingCosts, total } = this.calculator.createCalculator(
       product,
       quantity,
@@ -73,11 +76,13 @@ export class CartService {
     cartToken: string,
     productId: number | string,
     variantId: number | string = null,
+    optionSeleted: IHoroscope = null,
     quantity: number
   ) {
     const cart = await this.get(cartToken)
     const product = await this.productService.get(productId, variantId)
     product.amount = quantity
+    product.customOptionSelected = optionSeleted
     cart.items = [...cart.items, product]
     const { subtotal, shippingCosts, total } =
       this.calculator.recalculateTotals(cart)

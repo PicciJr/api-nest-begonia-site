@@ -23,6 +23,7 @@ export class ProductService {
         precio_max,
         titulo,
         variantes,
+        personalizacion_horoscopos,
         slug,
         tipo_producto,
       } = response.data
@@ -58,6 +59,7 @@ export class ProductService {
             variant: variante,
           }
         }),
+        customHoroscopes: personalizacion_horoscopos?.[0]?.horoscopos || [],
       }
     }
     // TODO: si no se encuentra el producto, devolver un error
@@ -79,6 +81,7 @@ export class ProductService {
             precio_max,
             titulo,
             variantes,
+            personalizacion_horoscopos,
             slug,
             tipo_producto,
             Relacionados,
@@ -101,6 +104,7 @@ export class ProductService {
                   variant: variante,
                 }
               }),
+              customHoroscopes: personalizacion_horoscopos?.[0]?.horoscopos || [],
               relatedProducts:
                 Relacionados.map(({ productos }) => productos) || [],
             }
@@ -124,6 +128,7 @@ export class ProductService {
         precio_max,
         titulo,
         variantes,
+        personalizacion_horoscopos,
         slug,
         tipo_producto,
       }) => {
@@ -136,6 +141,7 @@ export class ProductService {
           maxPrice: precio_max || null,
           title: titulo,
           type: tipo_producto,
+          customHoroscopes: personalizacion_horoscopos?.[0]?.horoscopos || [],
           slug,
           hasVariants: variantes?.length > 0 || false,
           variants: variantes.map(({ id, precio, variante }) => {
