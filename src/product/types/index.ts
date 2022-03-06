@@ -7,6 +7,8 @@ export interface IProductVariant {
 export interface IHoroscope {
   firstHand: string
   secondHand: string
+  firstHandGender: string
+  secondHandGender: string
 }
 
 export interface IProduct {
