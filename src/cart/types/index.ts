@@ -4,6 +4,7 @@ export enum ShippingTariff {
 }
 
 export interface IAddress {
+  name: string
   street: string
   province: string
   postalCode: string
